@@ -1,10 +1,12 @@
 import 'reflect-metadata';
-import { Request, Response, Application } from 'express';
+import { Application } from 'express';
 import { createExpressServer } from 'routing-controllers';
-import { ProductController } from './controllers/ProductController';
 import path from 'path';
+import * as dotenv from 'dotenv';
 
-console.log(path.join(__dirname, "/controllers/*.ts"));
+dotenv.config({
+    path: path.join(__dirname, "../../.env"),
+})
 
 const app: Application = createExpressServer({
     cors: true,
@@ -16,6 +18,8 @@ const app: Application = createExpressServer({
     interceptors: [path.join(__dirname, "/interceptors/*.js")],
 });
 
-app.listen(8000, () => {
-    console.log("Server started on port 8000");
+const port = process.env.APP_PORT || 2000;
+console.log('port', port);
+app.listen(port, () => {
+    console.log(`[server] Server started on port ${port}`);
 });

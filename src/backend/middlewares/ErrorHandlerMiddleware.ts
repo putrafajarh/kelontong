@@ -14,6 +14,7 @@ export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
             errors: error[`errors`] || [],
         });
 
+        // only print the stacktrace to console if not in production mode
         if (this.isProduction) {
             console.error(error.name, error.message);
         } else {
