@@ -1,6 +1,0 @@
-{
-    "watch": [ "src/backend" ],
-    "execMap": {
-        "ts": "ts-node"
-    }
-}

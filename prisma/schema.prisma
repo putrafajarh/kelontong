@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Category {
-  id        BigInt    @id @default(autoincrement())
+  id        String    @id @default(cuid())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   name      String    @db.VarChar(255)
@@ -16,7 +16,7 @@ model Category {
 }
 
 model User {
-  id        BigInt    @id @default(autoincrement())
+  id        String    @id @default(cuid())
   email     String    @unique @db.VarChar(255)
   name      String    @db.VarChar(255)
   password  String    @db.VarChar(255)
@@ -27,7 +27,7 @@ model User {
 }
 
 model Product {
-  id          BigInt   @id @default(autoincrement())
+  id          String   @id @default(cuid())
   name        String   @db.VarChar(255)
   sku         String   @unique @db.VarChar(255)
   description String
@@ -39,9 +39,9 @@ model Product {
   image       String   @db.VarChar(255)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  categoryId  BigInt
-  userId      BigInt
-  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  userId      String
+  category    Category? @relation(fields: [categoryId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
 }
 

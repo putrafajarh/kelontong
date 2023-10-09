@@ -50,6 +50,8 @@ async function main() {
   }
 
   for (let i = 0; i < 100; i++) {
+    const random = Math.floor(Math.random() * categories.length)
+
     await prisma.product.create({
       data: {
         name: faker.commerce.productName(),
@@ -57,7 +59,7 @@ async function main() {
         description: faker.commerce.productDescription(),
         price: faker.commerce.price({ min: 10, max: 1000}),
         userId: admin.id,
-        categoryId: Math.floor(Math.random() * categories.length) + 1,
+        categoryId: categories[random].id,
         weight: faker.number.int({ min: 100, max: 1000}),
         length: faker.number.int({ min: 50, max: 1000}),
         width: faker.number.int({ min: 50, max: 1000}),
