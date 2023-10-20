@@ -2,6 +2,7 @@ import {
     JsonController,
     OnUndefined,
     QueryParam,
+    UseBefore,
     Body,
     Req,
     Res,
@@ -15,14 +16,17 @@ import { ProductNotFoundError } from '../errors/ProductNotFoundError';
 import prisma from '../prisma';
 import { CreateProductBody } from './request/ProductRequest';
 import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError } from '@prisma/client/runtime/library';
+import { AuthMiddleware } from '../middlewares/AuthMiddleware';
 
 @JsonController('/product')
 export class ProductController {
 
     @Get('/')
+    @UseBefore(AuthMiddleware)
     public async getProducts(
         @QueryParam('page') page: number = 1,
         @QueryParam('per_page') perPage: number = 20,
+        @Req() req: Request,
         @Res() res: Response): Promise<any> {
 
             if (page < 1) {
@@ -30,7 +34,7 @@ export class ProductController {
                 page = 1;
             }
 
-            if (perPage < 10 && perPage > 100) {
+            if (perPage < 10 || perPage > 100) {
                 // Limit perPage to 10 - 100, default to 20
                 perPage = 20;
             }
@@ -40,8 +44,18 @@ export class ProductController {
                 take: perPage,
                 include: {
                     user: true,
+                    category: true,
                 }
             });
+
+            const totalCount = await prisma.product.count();
+            const lastPage = Math.ceil(totalCount / perPage);
+
+            res.header("Access-Control-Expose-Headers", "*")
+            res.set('X-Total-Count', totalCount.toString());
+            res.set('X-Current-Page', page.toString());
+            res.set('X-Per-Page', perPage.toString());
+            res.set('X-Last-Page', lastPage.toString());
 
             return res.send(products);
     }
@@ -86,6 +100,9 @@ export class ProductController {
             where: {
                 id: req.params.id,
             },
+            include: {
+                category: true,
+            }
         });
 
         if (!product) {

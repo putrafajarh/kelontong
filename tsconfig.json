@@ -18,7 +18,17 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "paths": {
+      "@/*": ["./src/frontend/*"],
+      "@assets/*": ["./src/frontend/assets/*"],
+      "@cmp/*": ["./src/frontend/components/*"],
+      "@stores/*": ["./src/frontend/stores/*"],
+      "@use/*": ["./src/frontend/use/*"],
+      "@pages/*": ["./src/frontend/pages/*"],
+      "@shared/*": ["./src/shared/*"],
+    }
   },
   "include": ["src/frontend/**/*.ts", "src/frontend/**/*.d.ts", "src/frontend/**/*.tsx", "src/frontend/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
