@@ -1,14 +1,14 @@
-import axios from "axios"
-import { HttpStatusCode } from "axios"
-import { useAuthStore } from "@stores/auth";
-import router from "@/router";
+import axios from 'axios'
+import { HttpStatusCode } from 'axios'
+import { useAuthStore } from '@stores/auth'
+import router from '@/router'
 
 const http = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json'
     }
-});
+})
 
 http.interceptors.request.use(
     (config) => {
@@ -32,7 +32,7 @@ http.interceptors.response.use(
         if (error.config.url === '/auth/login') {
             return Promise.reject(error)
         }
-        
+
         const auth = useAuthStore()
         if (error.response.status === HttpStatusCode.Unauthorized) {
             auth.logout().then(() => {

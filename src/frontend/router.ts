@@ -1,17 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginVue from './components/Auth/Login.vue';
-import ProfileVue from '@pages/Profile.vue';
-import PageNotFound from '@pages/PageNotFound.vue';
-import Product from '@pages/Product.vue';
-import ProductDetail from '@pages/ProductDetail.vue';
-import Home from '@pages/Home.vue';
+import LoginVue from './components/Auth/Login.vue'
+import ProfileVue from '@pages/Profile.vue'
+import PageNotFound from '@pages/PageNotFound.vue'
+import Product from '@pages/Product.vue'
+import ProductDetail from '@pages/ProductDetail.vue'
+import Home from '@pages/Home.vue'
 // import PageNotFound from './components/PageNotFound.vue'
-import { useAuthStore } from '@stores/auth';
+import { useAuthStore } from '@stores/auth'
 import { RouteLocationNormalized } from 'vue-router'
 
 declare module 'vue-router' {
+    // eslint-disable-next-line no-unused-vars
     interface RouteMeta {
-        layout: string 
+        layout: string
         requiresAuth?: boolean
     }
 }
@@ -34,7 +35,7 @@ const router = createRouter({
             component: ProfileVue,
             meta: {
                 requiresAuth: true,
-                layout: 'AppLayoutAdmin',
+                layout: 'AppLayoutAdmin'
             }
         },
         {
@@ -69,9 +70,9 @@ const router = createRouter({
             meta: {
                 layout: 'AppLayoutGuest'
             }
-        },
-    ],
-});
+        }
+    ]
+})
 
 async function loadLayoutMiddleware(route: RouteLocationNormalized) {
     try {
@@ -90,7 +91,7 @@ async function loadLayoutMiddleware(route: RouteLocationNormalized) {
 
 router.beforeEach(loadLayoutMiddleware)
 router.beforeEach((to, from, next) => {
-    if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
         console.log('middleware: AUTH')
         const auth = useAuthStore()
         if (!auth.isAuthenticated) {
@@ -99,18 +100,18 @@ router.beforeEach((to, from, next) => {
                 query: { redirectTo: to.fullPath }
             })
         } else {
-            next();
+            next()
         }
     }
-    if (to.matched.some(record => record.meta.guest)) {
+    if (to.matched.some((record) => record.meta.guest)) {
         console.log('middleware: GUEST')
         const auth = useAuthStore()
         if (auth.isAuthenticated) {
-            next({ path: '/' });
+            next({ path: '/' })
         } else {
-            next();
+            next()
         }
     }
-  })
+})
 
-export default router;
+export default router

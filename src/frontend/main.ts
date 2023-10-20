@@ -17,7 +17,6 @@ app.use(router)
 app.use(pinia)
 app.use(head)
 
-app.component('icon', icon)
+app.component('Icon', icon)
 
 app.mount('#app')
-
