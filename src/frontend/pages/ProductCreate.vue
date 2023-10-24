@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { useHead } from '@unhead/vue'
 
 import { useProductStore, ErrorResponse } from '@stores/product'
@@ -9,8 +8,9 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import Breadcrumb, { IBreadcrumb } from '../components/Breadcrumb.vue'
 import { PhotoIcon } from '@heroicons/vue/24/solid'
 
+import router from '@/router'
+
 const productStore = useProductStore()
-const product = computed(() => productStore.product)
 const user = computed(() => useAuthStore().user)
 const imageData = ref<File | null>(null)
 const error = ref<ErrorResponse>()
@@ -49,6 +49,7 @@ const handleCreateProduct = async () => {
     productStore
         .createProduct(data, imageData.value)
         .then((res) => {
+            router.push({ path: `/product/` })
             console.log(res.data)
         })
         .catch((err) => {

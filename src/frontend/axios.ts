@@ -24,11 +24,9 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
     (response) => {
-        console.log('interceptor: response')
         return response
     },
     (error) => {
-        console.log('interceptor: error', error)
         if (error.config.url === '/auth/login') {
             return Promise.reject(error)
         }
@@ -40,7 +38,6 @@ http.interceptors.response.use(
             HttpStatusCode.Forbidden
         ]
         if (redirectLoginStatus.includes(status)) {
-            console.log('Unauthorized')
             auth.logout().then(() => {
                 router.push({
                     path: '/login',

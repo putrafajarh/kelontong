@@ -52,13 +52,14 @@ const fileUploadOptions = {
 };
 
 @JsonController('/product')
+@UseBefore(AuthMiddleware)
 export class ProductController {
 
     @Get('/')
-    @UseBefore(AuthMiddleware)
     public async getProducts(
         @QueryParam('page') page: number = 1,
         @QueryParam('per_page') perPage: number = 20,
+        @QueryParam('q') q: string = '',    
         @Req() req: Request,
         @Res() res: Response): Promise<any> {
 
@@ -73,6 +74,12 @@ export class ProductController {
             }
 
             const products = await prisma.product.findMany({
+                where: q && q.trim() !== '' ? {
+                    name: {
+                        contains: q,
+                        mode: 'insensitive',
+                    }
+                } : undefined,
                 orderBy: [
                     {
                         createdAt: 'desc'
@@ -86,7 +93,14 @@ export class ProductController {
                 }
             });
 
-            const totalCount = await prisma.product.count();
+            const totalCount = await prisma.product.count({
+                where: q && q.trim() !== '' ? {
+                    name: {
+                        contains: q,
+                        mode: 'insensitive',
+                    }
+                } : undefined,
+            });
             const lastPage = Math.ceil(totalCount / perPage);
 
             res.header("Access-Control-Expose-Headers", "*")

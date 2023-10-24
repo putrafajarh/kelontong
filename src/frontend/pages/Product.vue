@@ -2,6 +2,7 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@unhead/vue'
+import { TrashIcon } from '@heroicons/vue/24/solid'
 
 import { useProductStore, ProductData } from '@stores/product'
 import router from '@/router'
@@ -12,6 +13,8 @@ const productStore = useProductStore()
 const products = computed(() => productStore.products)
 const pagination = computed(() => productStore.pagination)
 const route = useRoute()
+
+const searchQuery = route.query.search as string
 
 const page = ref(parseInt(route.query.page as string) || 1)
 const perPage = ref(parseInt(route.query.perPage as string) || 20)
@@ -29,7 +32,7 @@ const goToNextPage = () => {
 }
 
 onMounted(async () => {
-    await productStore.getAllProducts(page.value, perPage.value)
+    await productStore.getAllProducts(page.value, perPage.value, searchQuery)
 })
 
 watch([page, perPage], async ([newPage, newPerPage], [oldPage, oldPerPage]) => {
@@ -42,6 +45,10 @@ const pages = [{ name: 'Products', href: undefined, current: true }]
 
 const handleProductDetail = (product: ProductData) => {
     router.push({ path: `/product/${product.id}` })
+}
+
+const handleDeleteProduct = (id: string) => {
+    productStore.deleteProduct(id)
 }
 
 useHead
@@ -71,9 +78,18 @@ useHead
                 <div
                     v-for="product in products"
                     :key="product.id"
-                    class="group cursor-pointer relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white drop-shadow-sm"
+                    class="group cursor-pointer relative flex flex-col rounded-lg border border-gray-200 bg-white drop-shadow-sm"
                     @click="handleProductDetail(product)"
                 >
+                    <button
+                        class="z-10 bg-red-700 border border-white w-8 h-8 rounded-full absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 group-hover:flex hidden items-center justify-center text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                        @click.stop.prevent="handleDeleteProduct(product.id)"
+                    >
+                        <TrashIcon
+                            class="mx-auto h-5 w-5 text-gray-100"
+                            aria-hidden="true"
+                        />
+                    </button>
                     <div
                         class="relative aspect-square overflow-hidden bg-gray-200 group-hover:opacity-75"
                     >
@@ -112,7 +128,7 @@ useHead
                     </div>
                 </div>
             </div>
-            <div class="mt-8">
+            <div v-if="products.length > 0" class="mt-8">
                 <nav
                     class="flex items-center justify-between px-4 py-3 sm:px-6"
                     aria-label="Pagination"
@@ -131,6 +147,7 @@ useHead
                                     : pagination.total
                             }}</span>
                             {{ ' ' }}
+                            of
                             <span class="font-medium">{{
                                 pagination.total
                             }}</span>

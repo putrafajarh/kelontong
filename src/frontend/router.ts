@@ -51,6 +51,7 @@ const router = createRouter({
         },
         {
             path: '/product',
+            name: 'product',
             component: () => import('@pages/Product.vue'),
             meta: {
                 requiresAuth: true,
@@ -89,12 +90,10 @@ const router = createRouter({
 async function loadLayoutMiddleware(route: RouteLocationNormalized) {
     try {
         const layout = route.meta.layout
-        console.log('loadLayoutMiddleware', layout)
         let layoutComponent = await import(`./layouts/${layout}.vue`)
         route.meta.layoutComponent = layoutComponent.default
     } catch (e) {
         console.error('Error occurred in processing of layouts: ', e)
-        console.log('Mounted default layout AppLayoutDefault')
         let layout = 'AppLayoutDefault'
         let layoutComponent = await import(`./layouts/${layout}.vue`)
         route.meta.layoutComponent = layoutComponent.default
@@ -104,7 +103,6 @@ async function loadLayoutMiddleware(route: RouteLocationNormalized) {
 router.beforeEach(loadLayoutMiddleware)
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
-        console.log('middleware: AUTH')
         const auth = useAuthStore()
         if (!auth.isAuthenticated) {
             next({
@@ -116,7 +114,6 @@ router.beforeEach((to, from, next) => {
         }
     }
     if (to.matched.some((record) => record.meta.guest)) {
-        console.log('middleware: GUEST')
         const auth = useAuthStore()
         if (auth.isAuthenticated) {
             next({ path: '/' })

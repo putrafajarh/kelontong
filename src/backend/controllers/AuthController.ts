@@ -23,7 +23,6 @@ export class AuthController {
 
     @Post('/login')
     public async login(@Body({ validate: true, required: true }) body: any, @Req() req: any, @Res() res: any): Promise<any> {
-        console.log('login')
         const user = await prisma.user.findFirst({
             where: { email: body.email }
         });

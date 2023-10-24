@@ -64,12 +64,17 @@ export const useProductStore = defineStore('product', {
     }),
     getters: {},
     actions: {
-        async getAllProducts(page: number = 1, perPage: number = 20) {
+        async getAllProducts(
+            page: number = 1,
+            perPage: number = 20,
+            q?: string
+        ) {
             try {
                 const res = await http.get<ProductData[]>('/product', {
                     params: {
                         page,
-                        perPage
+                        perPage,
+                        q
                     }
                 })
                 if (res.status === HttpStatusCode.Ok) {
@@ -115,16 +120,29 @@ export const useProductStore = defineStore('product', {
                 if (imageData) formData.append('image', imageData)
                 formData.append('userId', product.userId)
 
-                // Display the key/value pairs
-                for (var pair of formData.entries()) {
-                    console.log(pair[0] + ', ' + pair[1])
-                }
-
                 const res = await http.post<ProductData>(`/product`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 })
+                return res
+            } catch (err) {
+                console.error(err)
+                if (axios.isAxiosError<ErrorResponse>(err)) {
+                    throw err
+                }
+                throw err
+            }
+        },
+        async deleteProduct(id: string) {
+            try {
+                const res = await http.delete<ProductData>(`/product/${id}`)
+                if (res.status === HttpStatusCode.Ok) {
+                    // delete product from products
+                    this.products = this.products.filter(
+                        (product) => product.id !== id
+                    )
+                }
                 return res
             } catch (err) {
                 console.error(err)
