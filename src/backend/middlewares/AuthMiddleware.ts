@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ExpressMiddlewareInterface, Middleware } from 'routing-controllers';
-import passport from 'passport';
+import { ExpressMiddlewareInterface } from 'routing-controllers';
 import { verify } from 'jsonwebtoken';
 
 export class AuthMiddleware implements ExpressMiddlewareInterface {

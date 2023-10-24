@@ -1,11 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginVue from './components/Auth/Login.vue'
-import ProfileVue from '@pages/Profile.vue'
-import PageNotFound from '@pages/PageNotFound.vue'
-import Product from '@pages/Product.vue'
-import ProductDetail from '@pages/ProductDetail.vue'
-import Home from '@pages/Home.vue'
-// import PageNotFound from './components/PageNotFound.vue'
+
 import { useAuthStore } from '@stores/auth'
 import { RouteLocationNormalized } from 'vue-router'
 
@@ -21,9 +15,26 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
+            path: '/',
+            component: () => import('@pages/Home.vue'),
+            meta: {
+                requiresAuth: true,
+                layout: 'AppLayoutAdmin'
+            }
+        },
+        {
             path: '/login',
             name: 'login',
-            component: LoginVue,
+            component: () => import('@pages/Login.vue'),
+            meta: {
+                guest: true,
+                layout: 'AppLayoutGuest'
+            }
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: () => import('@pages/Register.vue'),
             meta: {
                 guest: true,
                 layout: 'AppLayoutGuest'
@@ -32,7 +43,7 @@ const router = createRouter({
         {
             path: '/profile',
             name: 'profile',
-            component: ProfileVue,
+            component: () => import('@pages/Profile.vue'),
             meta: {
                 requiresAuth: true,
                 layout: 'AppLayoutAdmin'
@@ -40,7 +51,7 @@ const router = createRouter({
         },
         {
             path: '/product',
-            component: Product,
+            component: () => import('@pages/Product.vue'),
             meta: {
                 requiresAuth: true,
                 layout: 'AppLayoutAdmin'
@@ -49,15 +60,16 @@ const router = createRouter({
         {
             path: '/product/:id',
             name: 'product-detail',
-            component: ProductDetail,
+            component: () => import('@pages/ProductDetail.vue'),
             meta: {
                 requiresAuth: true,
                 layout: 'AppLayoutAdmin'
             }
         },
         {
-            path: '/',
-            component: Home,
+            path: '/product/create',
+            name: 'product-create',
+            component: () => import('@pages/ProductCreate.vue'),
             meta: {
                 requiresAuth: true,
                 layout: 'AppLayoutAdmin'
@@ -65,10 +77,10 @@ const router = createRouter({
         },
         {
             path: '/:pathMatch(.*)*',
-            name: 'not-found',
-            component: PageNotFound,
+            name: 'PageNotFound',
+            component: () => import('@pages/PageNotFound.vue'),
             meta: {
-                layout: 'AppLayoutGuest'
+                layout: 'AppLayoutAdmin'
             }
         }
     ]

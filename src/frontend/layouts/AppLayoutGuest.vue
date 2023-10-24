@@ -1,16 +1,12 @@
+<script lang="ts" setup></script>
+
 <template>
     <div>
         <div>
             <h1>Guest Layout</h1>
         </div>
-        <slot/>
+        <slot />
     </div>
 </template>
 
-<script lang="ts" setup>
-console.log('sempak')
-</script>
-
-<style scoped>
-
-</style>
+<style scoped></style>

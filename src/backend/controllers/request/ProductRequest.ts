@@ -25,7 +25,7 @@ export class CreateProductBody {
     @IsOptional()
     @IsNumber()
     height?: number;
-    @IsUrl()
+    @IsOptional()
     image: string;
     @IsNotEmpty()
     userId: string;

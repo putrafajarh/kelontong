@@ -2,8 +2,8 @@
 import { useRoute } from 'vue-router'
 import { useHead } from '@unhead/vue'
 
-import { useProductStore } from '@stores/product'
-import { onMounted, computed } from 'vue'
+import { useProductStore, ProductData } from '@stores/product'
+import { onMounted, computed, ref } from 'vue'
 import Breadcrumb, { IBreadcrumb } from '../components/Breadcrumb.vue'
 
 const id = useRoute().params.id

@@ -5,6 +5,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import icon from './components/SvgIcon.vue'
 import router from '@/router'
 import './style.css'
+import '@/validator'
 import App from './App.vue'
 
 const pinia = createPinia()

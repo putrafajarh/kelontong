@@ -34,7 +34,13 @@ http.interceptors.response.use(
         }
 
         const auth = useAuthStore()
-        if (error.response.status === HttpStatusCode.Unauthorized) {
+        const status = error.response.status as number
+        const redirectLoginStatus = [
+            HttpStatusCode.Unauthorized,
+            HttpStatusCode.Forbidden
+        ]
+        if (redirectLoginStatus.includes(status)) {
+            console.log('Unauthorized')
             auth.logout().then(() => {
                 router.push({
                     path: '/login',

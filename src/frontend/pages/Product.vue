@@ -52,7 +52,19 @@ useHead
         <div
             class="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8"
         >
-            <Breadcrumb :pages="pages" />
+            <div class="flex w-full mb-8">
+                <div class="grow">
+                    <Breadcrumb :pages="pages" />
+                </div>
+                <div class="flex items-center pl-4">
+                    <RouterLink
+                        to="/product/create"
+                        class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                        Create
+                    </RouterLink>
+                </div>
+            </div>
             <div
                 class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-3 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-8"
             >
@@ -63,7 +75,7 @@ useHead
                     @click="handleProductDetail(product)"
                 >
                     <div
-                        class="relative aspect-square bg-gray-200 group-hover:opacity-75"
+                        class="relative aspect-square overflow-hidden bg-gray-200 group-hover:opacity-75"
                     >
                         <img
                             :src="product.image"
@@ -146,4 +158,8 @@ useHead
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#breadcrumb {
+    @apply !mb-0;
+}
+</style>
