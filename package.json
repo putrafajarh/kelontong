@@ -9,9 +9,8 @@
     "frontend:dev": "vite",
     "frontend:build": "vue-tsc && vite build",
     "frontend:preview": "vite preview",
-    "backend:dev": "tsc-watch --build --clean -p ./src/backend/tsconfig.json --onSuccess \"node dist/app.js\"",
     "backend:start": "tsc -p ./src/backend/tsconfig.json && node dist/app.js",
-    "dev": "nodemon --watch 'src/backend/**/*' --ext 'ts,json' --exec npm run backend:start"
+    "backend:dev": "nodemon --watch 'src/backend/**/*' --ext 'ts,json' --exec npm run backend:start"
   },
   "prisma": {
     "seed": "ts-node --project src/backend/tsconfig.json prisma/seed.ts"
