@@ -27,3 +27,9 @@ npm run backend:dev
 ```
 npm run frontend:dev
 ```
+
+## Login information
+```
+email: putrafajarh@gmail.com
+password: verysecret
+```
